@@ -10,9 +10,8 @@ from .serializers import IssueSerializer, CommentSerializer
 from .permissions import canAccessIssues, canAccessComments
 
 
-# Create your views here.
 class IssueListView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, canAccessIssues]
 
     def get(self, request, project_id, *args, **kwargs):
         issues = Issue.objects.filter(project_id=project_id)
@@ -28,7 +27,7 @@ class IssueListView(APIView):
 
 
 class IssueDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, canAccessIssues]
 
     def get_object(self, issue_id):
         try:
@@ -51,35 +50,13 @@ class IssueDetailView(APIView):
             return Response(serializer.data) 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        """ for key in request.data:
-            if key.isdigit():
-                new_data = request.data[int(key)]
-            else:
-                new_data = request.data[key]
-
-            try:
-                setattr(issue, key, new_data)
-                issue.save()
-                print(issue.assignee_user_id)
-
-            except KeyError:
-                return Response(
-                    f"KeyError, please check your parameters : {request.data}"
-                )
-            return Response(request.data) """
-
-    def delete(self, request, project_id, issue_id):
-        issue = self.get_object(issue_id)
-        issue.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class CommentListView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, canAccessComments]
 
     def get(self, request, project_id, issue_id, *args, **kwargs):
         comments = Comment.objects.filter(issue_id=issue_id)
-        #comments = Comment.objects.all()
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
 
@@ -92,7 +69,7 @@ class CommentListView(APIView):
 
 
 class CommentDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, canAccessComments]
 
     def get_object(self, comment_id):
         try:
@@ -112,17 +89,6 @@ class CommentDetailView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        """ for key in request.data:
-            new_data = request.data[key]
-            try:
-                # contributor[key] =
-                setattr(comment, key, new_data)
-                comment.save()
-                # print(contributor[key])
-            except KeyError:
-                pass 
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)"""
-        
 
     def delete(self, request, project_id, issue_id, comment_id, format=None):
         comment = self.get_object(comment_id)
