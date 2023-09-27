@@ -1,0 +1,6 @@
+.env/
+ __pycache__
+ SoftDesk/__pycache__/*
+
+ db.sqlite3
+ ._db.sqlite3
