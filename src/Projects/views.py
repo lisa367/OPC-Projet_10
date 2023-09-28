@@ -13,12 +13,7 @@ from .permissions import ProjectAccessPermission, ContributorAccessPermission
 class ProjectListView(APIView):
     permission_classes = [IsAuthenticated,]
 
-    def get(
-        self,
-        request,
-        *args,
-        **kwargs,
-    ):
+    def get(self, request, *args, **kwargs,):
         user_projects = Contributor.objects.filter(user=request.user)
         projects_id_list = [obj.project.all()[0].id for obj in user_projects]
         print(projects_id_list)
