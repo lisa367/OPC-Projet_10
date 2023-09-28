@@ -24,9 +24,9 @@ Votre répertoire local devrait désormais avoir la structure suivante :
                 | Issues/          
                 | Projects/
                 | SoftDesk/
-                | .gitignore
-                | README.md
-                | requirements.txt
+        | .gitignore
+        | README.md
+        | requirements.txt
 </pre>
 <br>
 <br>
