@@ -11,7 +11,7 @@ from .permissions import ProjectAccessPermission, ContributorAccessPermission
 
 
 class ProjectListView(APIView):
-    permission_classes = [IsAuthenticated, ProjectAccessPermission]
+    permission_classes = [IsAuthenticated,]
 
     def get(
         self,
